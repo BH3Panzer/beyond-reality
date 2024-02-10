@@ -1,13 +1,16 @@
 import pyxel as px
 WIDTH = 512
 HEIGHT = 256
-px.init(WIDTH, HEIGHT, title="Beyond Reality")
+class App:
+    def __init__(self):
+        px.init(WIDTH, HEIGHT)
+        self.x = 0
+        px.run(self.update, self.draw)
 
-def update():
-    pass
+    def update(self):
+        pass
 
-def draw():
-    px.cls(0)
+    def draw(self):
+        px.cls(0)
 
-px.run(update, draw)
-
+App()
