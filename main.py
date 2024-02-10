@@ -4,7 +4,7 @@ HEIGHT = 256
 class App:
     def __init__(self):
         px.init(WIDTH, HEIGHT)
-        self.x = 0
+        px.mouse(True)
         px.run(self.update, self.draw)
 
     def update(self):
