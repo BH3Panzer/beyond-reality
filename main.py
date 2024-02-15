@@ -6,6 +6,7 @@ class App:
         px.init(WIDTH, HEIGHT)
         px.mouse(True)
         px.run(self.update, self.draw)
+        self.state = "main_menu"
 
     def update(self):
         pass
