@@ -5,7 +5,9 @@ px.init(WIDTH, HEIGHT)
 px.mouse(True)
 px.load("res.pyxres")
 state = "main_menu"
-
+class Player:
+    def __init__(self):
+        pass
 def update():
     pass
 
