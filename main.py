@@ -19,6 +19,6 @@ def update():
 def draw():
     px.cls(0)
     if state == "main_menu":
-        px.blt(int(WIDTH/8)*3, 0, 0, 8, 0, 39, 24, colkey=0)
+        px.blt(int(WIDTH/8)*3, 0, 0, 8, 0, 87, 15, colkey=0)
 
 px.run(update, draw)
