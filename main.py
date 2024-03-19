@@ -5,6 +5,7 @@ px.init(WIDTH, HEIGHT)
 px.mouse(True)
 px.load("res.pyxres")
 state = "main_menu"
+
 class Player:
     def __init__(self, name, pv, pa, pos = [0, 0]):
         self.name = name
@@ -19,6 +20,6 @@ def update():
 def draw():
     px.cls(0)
     if state == "main_menu":
-        px.blt(int(WIDTH/8)*3, 0, 0, 8, 0, 87, 16, colkey=0)
+        px.blt(int(WIDTH/8)*3, 0, 0, 8, 0, 145, 23, colkey=0)
 
 px.run(update, draw)

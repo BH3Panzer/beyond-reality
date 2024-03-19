@@ -1,0 +1,1 @@
+D:\programme\python3\python.exe -m pyxel edit ../res
