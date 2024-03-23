@@ -6,6 +6,7 @@ px.mouse(True)
 px.load("res.pyxres")
 state = "main_menu"
 
+px.playm(0, loop=True)
 class Player:
     def __init__(self, name, pv, pa, pos = [0, 0]):
         self.name = name
