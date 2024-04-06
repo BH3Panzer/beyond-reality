@@ -5,6 +5,9 @@ px.init(WIDTH, HEIGHT)
 px.mouse(True)
 px.load("res.pyxres")
 state = "main_menu"
+l = locals()
+perso = {"pied":0, "corps":1, "tete":0}
+from frames import *
 
 #son  ton:Pulse,Triangle,Square,Noise  efx:F; la note s'arrête instant, S;relie les notes, Vibrato, Normal
 
@@ -16,14 +19,19 @@ class Player:
         self.pa = pa
         self.pos = pos
 
+def drawEntitie(entitie, x, y, name):
+    for i in entitie.items():
+        sprite = frames[name][i[0]][i[1]] #va prendre les dimensions du sprite [nom de l'entité];[nom de la partie du corps];[frame de cette partie]
+        px.blt(x + frames[name][i[0]][0][0] - frames[name]["defaut"][0], y + frames[name][i[0]][0][1] - frames[name]["defaut"][1], 0, sprite[0], sprite[1], sprite[2]-sprite[0]+1, sprite[3]-sprite[1]+1, colkey=frames[name]["transparence"])
 
 def update():
-    pass
+    global test
 
 def draw():
     px.cls(0)
     if state == "main_menu":
         px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 145, 24, colkey=0)
-        px.text(int(WIDTH/2),int(HEIGHT/2),"abcdefghijklmno pqrstuvwxyz",1) #6 hauteur, 3 largeur
+        px.text(int(WIDTH/2),int(HEIGHT/2),"abcdefghijklmno pqrstuvwxyz",1) #Les lettres ont 6 hauteur et 3 largeur
+    drawEntitie(perso, 30, 70, "perso")
 
 px.run(update, draw)
