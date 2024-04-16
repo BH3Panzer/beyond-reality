@@ -1,2 +1,20 @@
-scientists are blue
-security guards are green
+===== Histoire =====
+
+Vous êtes un scientifique fesant des recherches et menant des expériences sur les dimensions. Au cours du vos recherches, vous êtes amené à trouver un cristal dimensionnel, ceci servant à la stablilité des dimensions.
+Malheuresement vous n'arrivez pas à le maintenir stable et il explose provoquant la déstabilisation de toute les dimensions alentours et de la vôtre. Vous vous retrouvez inconscient et vous vous réveillez dans une dimensions 
+très éloigné de la votre. Le cristal ayant été brisez, la corruption s'étend aux autres dimensions et menaces de réduire le monde à néant. Vous vous devez d'agir et d'aller régler tout ces problèmes.
+Au cours de votres périples vous retrouverez vos collègues qui pourront vous aider à vous préparez et rencontrerez d'autres habitants qui pourront vous en apprendre plus sur les dimensions.
+
+====================
+
+===== Univers =====
+	
+ -> Les dimensions sont reliés entre elles par différents cristaux ce qui permet de se déplacer entre elles.
+
+ -> Le laboratoire est constitué de plusieurs groupe de personnes:
+	- Les scientifiques ont une tenue bleu et sont chargés de faire les recherches et de mener les experiences.
+	- Les gardes de sécurité sont verts, ils sont chargés de protéger le reste du personnel des dangers possibles.
+	- Les agents d'entretien et les techniciens en orange sont chargés de faire le ménages et de maintenir les installations en état de marche.
+	- Le reste du personnel à un uniforme rose
+
+====================
