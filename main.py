@@ -22,13 +22,14 @@ from frames import *
 #son  ton:Pulse,Triangle,Square,Noise  efx:F; la note s'arrête instant, S;relie les notes, Vibrato, Normal
 
 px.playm(0, loop=True)
+# class for players
 class Player:
     def __init__(self, name, pv, pa, pos = [0, 0]):
         self.name = name
         self.pv = pv
         self.pa = pa
         self.pos = pos
-
+# class for entities
 class Entities:
     def __init__(self, sId, name, skin, pos, reverse):
         self.sId = sId
@@ -40,7 +41,7 @@ class Entities:
     
     def sDraw(self):
         drawEntitie(self.skin, self.x, self.y, self.name, self.reverse)
-
+#create an entitie
 def newEntitie(name, skin, pos, reverse = False):
     global allEntities
     i = 0
@@ -49,6 +50,7 @@ def newEntitie(name, skin, pos, reverse = False):
     allEntities.append(i)
     l["Entitie"+str(i)] = Entities(i, name, skin, pos ,reverse)
 
+# delete an entitie
 def supprEntitie(i):
     del l["Entitie"+str(i)]
     allEntities.remove(i)
@@ -59,6 +61,7 @@ def drawEntitie(skin, x, y, name, reverse = False):
         px.blt(x + frames[name][i[0]][0][0] - frames[name]["defaut"][0] + ((sprite[4] * (-1 if reverse else 1)) if len(sprite)>=5 else 0), y + frames[name][i[0]][0][1] - frames[name]["defaut"][1] + (sprite[5] if len(sprite)>=6 else 0)
             , frames[name]["image"], sprite[0], sprite[1], (sprite[2]-sprite[0]+1) * (-1 if reverse else 1), sprite[3]-sprite[1]+1, colkey=frames[name]["transparence"])
 
+# update game
 def update():
     global cristal,cristalTick,title,state
     if state == "title_menu":
@@ -76,7 +79,7 @@ def update():
             title += 1
             if title == 15:
                 state = "main_menu"
-
+# draw game
 def draw():
     px.cls(0)
     if state == "title_menu":
@@ -90,7 +93,7 @@ def draw():
     elif state == "main_menu":
         px.bltm(0,0,0,832,0,256,128)
         px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 145, 24, colkey=0)
-
+# created some entities for title menu
 newEntitie("scientifique", {"pied":0,"corps":0,"tete":0,"oeil":0}, [81,56], False)
 newEntitie("scientifique", {"pied":0,"corps":0,"tete":1,"oeil":4}, [159,56], True)
 newEntitie("scientifique", {"pied":1,"corps":1,"tete":2,"oeil":1}, [57,29], False)
