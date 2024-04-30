@@ -106,15 +106,15 @@ def update():
 def draw():
     px.cls(0)
     if state == "title_menu":
-        px.bltm(0,0,0,832,0,256,128)
-        px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 145, 24, colkey=0)
+        px.bltm(0,0,0,832,384,256,128)
+        px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 144, 24, colkey=0)
         if int(str(tick)[-1])%3 == 0:
             px.text(91,75,"press space to play",1)
         drawEntitie(cristal, 120, 56, "cristal")
         for i in allEntities:
             l["Entitie"+str(i)].sDraw()
     elif state == "main_menu":
-        px.bltm(0,0,0,832,0,256,128)
+        px.bltm(0,0,0,832,384,256,128)
         px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 144, 24, colkey=0)
         px.blt(3,3,0,152,0,16,16,colkey=0) #bouton quitter
         px.blt(237,3,0,168,0,16,16,colkey=0) #bouton option
