@@ -1,5 +1,6 @@
 import pyxel as px
 from os import listdir
+import random
 WIDTH = 256
 HEIGHT = 128
 fps = 30
@@ -9,11 +10,26 @@ px.init(WIDTH, HEIGHT, title, fps, quit_key)
 px.mouse(True)
 px.load("res.pyxres")
 state = "title_menu"
+dimensionsDictNames = {0: "Pink Glitch"}
+pinkGlitchIndex = {
+    "floor": [0, 64],
+    "top_wall": [8, 64],
+    "left_wall": [0, 72],
+    "right_wall": [8, 72],
+    "bottom_wall": [16, 64],
+    "top_left_angle": [16, 72],
+    "top_right_angle": [24, 72],
+    "bottom_left_angle": [24, 64],
+    "bottom_right_angle": [32, 64],
+    "wall": [48, 72],
+}
 l = locals()
 perso = {"pied":0, "corps":0, "tete":0}
 cristal = {"entier":0}
 cristalTick = [0,0]
 cristalClock = [[0,3],[8,5],[9,16],[8,5],[0,3],[7,5],[6,16],[7,5]]
+allRooms = []
+allTiles = []
 allEntities = []
 tick = 0 #timer pour des animations trop stylé 
 mapA = None #nom de la map actuel
@@ -49,6 +65,89 @@ class Entities:
     def sDraw(self):
         drawEntitie(self.skin, self.x, self.y, self.name, self.reverse)
 
+# class for chests
+# loot level from 0 (bad) to 4 (excellent)
+class Chest:
+    def __init__(self, pos: list, loot_level: int):
+        self.pos = pos
+        self.loot_level = loot_level
+
+    def generateNbOfItems(self):
+        if self.loot_level == 0:
+            self.nb_of_items = random.randint(0,1)
+        elif self.loot_level == 1:
+            self.nb_of_items = random.randint(1,2)
+        elif self.loot_level == 2:
+            self.nb_of_items = random.randint(1,3)
+        elif self.loot_level == 3:
+            self.nb_of_items = random.randint(2,4)
+        elif self.loot_level == 4:
+            self.nb_of_items = random.randint(3,5)
+
+# class for tiles
+class Tile:
+    def __init__(self, type: str, pos: list, dimension: int):
+        self.type = type
+        self.pos = pos
+        self.dimension = dimension
+        self.index = self.getIndex()
+
+    def getIndex(self):
+        if dimensionsDictNames[self.dimension] == "Pink Glitch":
+            return pinkGlitchIndex[self.type]
+
+    def drawTile(self):
+        px.blt(self.pos[0], self.pos[1], 2, self.index[0], self.index[1], 8, 8, colkey=0)
+
+
+# class for rooms
+class Room:
+    def __init__(self, type: str, dimension: int):
+        self.type = type
+        self.dimension = dimension
+
+    def generateRoom(self):
+        if self.type == "start":
+            self.nb_doors = 1
+            self.nb_free_chest = 1
+
+    def generateTestStartEmptyRoom(self):
+        global allTiles
+        if self.type == "start":
+            self.nb_doors = 1
+            self.nb_free_chest = 1
+            for i in range(32):
+                for j in range(16):
+                    if j == 0 and i == 0:
+                        allTiles.append(Tile("wall", [i*8, j*8], self.dimension))
+                    elif j == 0 and i == 31:
+                        allTiles.append(Tile("wall", [i*8, j*8], self.dimension))
+                    elif j == 15 and i == 0:
+                        allTiles.append(Tile("wall", [i*8, j*8], self.dimension))
+                    elif j == 15 and i == 31:
+                        allTiles.append(Tile("wall", [i*8, j*8], self.dimension))
+                    elif j == 0 :
+                        allTiles.append(Tile("top_wall", [i*8, j*8], self.dimension))
+                    elif j == 15:
+                        allTiles.append(Tile("bottom_wall", [i*8, j*8], self.dimension))
+                    elif i == 0:
+                        allTiles.append(Tile("left_wall", [i*8, j*8], self.dimension))
+                    elif i == 31:
+                        allTiles.append(Tile("right_wall", [i*8, j*8], self.dimension))
+                    else:
+                        allTiles.append(Tile("floor", [i*8, j*8], self.dimension))
+
+    def drawRoom(self):
+        for i in allTiles:
+            i.drawTile()
+
+
+# function that test empty room
+def testEmptyRoom():
+    global testRoom
+    testRoom = Room("start", 0)
+    testRoom.generateTestStartEmptyRoom()
+
 #create an entitie
 def newEntitie(name, skin, pos, reverse = False):
     global allEntities
@@ -75,6 +174,9 @@ def drawFichier(x,y,name):
 
 def readSaves(saves):
     pass
+
+
+
 
 def animStyle(col = 1): #anim trop stylée avec des tit' rectangles
     if tick > 0:
@@ -125,7 +227,8 @@ def update():
         if tick != 0:
             tick += 0.7
             if tick > 42:
-                state = "ingame"
+                testEmptyRoom()
+                state = "test_room"
                 tick = 0
         else:
             if px.btnp(px.MOUSE_BUTTON_LEFT):
@@ -168,6 +271,8 @@ def draw():
             if collidpoint([px.mouse_x, px.mouse_y], [10,30+i*34,236,55+i*34]):
                 px.rectb(9,29+i*34,238,27,10)
         animStyle(9)
+    elif state == "test_room":
+        testRoom.drawRoom()
 
 # created some entities for title menu
 newEntitie("scientifique", {"pied":0,"corps":0,"tete":0,"oeil":0}, [81,56], False)
