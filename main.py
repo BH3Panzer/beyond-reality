@@ -86,11 +86,12 @@ class Chest:
 
 # class for tiles
 class Tile:
-    def __init__(self, type: str, pos: list, dimension: int):
+    def __init__(self, type: str, pos: list, dimension: int, collision: bool):
         self.type = type
         self.pos = pos
         self.dimension = dimension
         self.index = self.getIndex()
+        self.collision = collision
 
     def getIndex(self):
         if dimensionsDictNames[self.dimension] == "Pink Glitch":
@@ -119,23 +120,23 @@ class Room:
             for i in range(32):
                 for j in range(16):
                     if j == 0 and i == 0:
-                        allTiles.append(Tile("wall", [i*8, j*8], self.dimension))
+                        allTiles.append(Tile("wall", [i*8, j*8], self.dimension, True))
                     elif j == 0 and i == 31:
-                        allTiles.append(Tile("wall", [i*8, j*8], self.dimension))
+                        allTiles.append(Tile("wall", [i*8, j*8], self.dimension, True))
                     elif j == 15 and i == 0:
-                        allTiles.append(Tile("wall", [i*8, j*8], self.dimension))
+                        allTiles.append(Tile("wall", [i*8, j*8], self.dimension, True))
                     elif j == 15 and i == 31:
-                        allTiles.append(Tile("wall", [i*8, j*8], self.dimension))
+                        allTiles.append(Tile("wall", [i*8, j*8], self.dimension, True))
                     elif j == 0 :
-                        allTiles.append(Tile("top_wall", [i*8, j*8], self.dimension))
+                        allTiles.append(Tile("top_wall", [i*8, j*8], self.dimension, True))
                     elif j == 15:
-                        allTiles.append(Tile("bottom_wall", [i*8, j*8], self.dimension))
+                        allTiles.append(Tile("bottom_wall", [i*8, j*8], self.dimension, True))
                     elif i == 0:
-                        allTiles.append(Tile("left_wall", [i*8, j*8], self.dimension))
+                        allTiles.append(Tile("left_wall", [i*8, j*8], self.dimension, True))
                     elif i == 31:
-                        allTiles.append(Tile("right_wall", [i*8, j*8], self.dimension))
+                        allTiles.append(Tile("right_wall", [i*8, j*8], self.dimension, True))
                     else:
-                        allTiles.append(Tile("floor", [i*8, j*8], self.dimension))
+                        allTiles.append(Tile("floor", [i*8, j*8], self.dimension, False))
 
     def drawRoom(self):
         for i in allTiles:
