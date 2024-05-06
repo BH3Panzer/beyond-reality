@@ -36,6 +36,7 @@ mapA = None #nom de la map actuel
 listSaves = listdir("saves/") #liste les fichiers de sauvegardes
 cursor = 0 #utiliser pour indiquer la position dans un menu déroulant
 saveLoad = None #nom du fichier de sauvegarde actuellement utiliser
+textInput = "" #texte entrer avec falseInput()
 
 from frames import *
 
@@ -176,9 +177,6 @@ def drawFichier(x,y,name):
 def readSaves(saves):
     pass
 
-
-
-
 def animStyle(col = 1): #anim trop stylée avec des tit' rectangles
     if tick > 0:
         for x in range(int(tick)):
@@ -198,6 +196,61 @@ def collidpoint(point, rect):
         return True
     else:
         return False
+
+def falseInput():
+    global textInput
+    if btnp(pg.KEY_A,20,5):
+        textInput += "a"
+    if btnp(pg.KEY_B,20,5):
+        textInput += "b"
+    if btnp(pg.KEY_C,20,5):
+        textInput += "a"
+    if btnp(pg.KEY_D,20,5):
+        textInput += "d"
+    if btnp(pg.KEY_E,20,5):
+        textInput += "e"
+    if btnp(pg.KEY_F,20,5):
+        textInput += "f"
+    if btnp(pg.KEY_G,20,5):
+        textInput += "g"
+    if btnp(pg.KEY_H,20,5):
+        textInput += "h"
+    if btnp(pg.KEY_I,20,5):
+        textInput += "i"
+    if btnp(pg.KEY_j,20,5):
+        textInput += "j"
+    if btnp(pg.KEY_K,20,5):
+        textInput += "k"
+    if btnp(pg.KEY_L,20,5):
+        textInput += "l"
+    if btnp(pg.KEY_M,20,5):
+        textInput += "m"
+    if btnp(pg.KEY_N,20,5):
+        textInput += "n"
+    if btnp(pg.KEY_O,20,5):
+        textInput += "o"
+    if btnp(pg.KEY_P,20,5):
+        textInput += "p"
+    if btnp(pg.KEY_Q,20,5):
+        textInput += "q"
+    if btnp(pg.KEY_R,20,5):
+        textInput += "r"
+    if btnp(pg.KEY_S,20,5):
+        textInput += "s"
+    if btnp(pg.KEY_T,20,5):
+        textInput += "t"
+    if btnp(pg.KEY_U,20,5):
+        textInput += "u"
+    if btnp(pg.KEY_V,20,5):
+        textInput += "v"
+    if btnp(pg.KEY_W,20,5):
+        textInput += "w"
+    if btnp(pg.KEY_X,20,5):
+        textInput += "x"
+    if btnp(pg.KEY_Y,20,5):
+        textInput += "y"
+    if btnp(pg.KEY_Z,20,5):
+        textInput += "z"
 
 # update game
 def update():
@@ -235,12 +288,14 @@ def update():
             if px.btnp(px.MOUSE_BUTTON_LEFT):
                 if collidpoint([px.mouse_x, px.mouse_y], [3,3,18,18]):
                     state = "main_menu"
+                elif collidpoint([px.mouse_x, px.mouse_y], [237,3,253,18]):
+                    
                 else:
                     for i in range(len(listSaves) if len(listSaves)<=3 else 3):
                         if collidpoint([px.mouse_x, px.mouse_y], [10,30+i*34,236,55+i*34]):
                             saveLoad = listSaves[i+cursor]
                             tick += 1
-            if px.btnp(px.KEY_S, 30, 10) or px.btnp(px.KEY_DOWN, 30, 10):
+            if px.btnp(px.KEY_S, 30, 10) or px.btnp(px.KEY_DOWN, 30, 10) and cursor != len(listSaves)-3:
                 cursor += 1
             if (px.btnp(px.KEY_Z, 30, 10) or px.btnp(px.KEY_UP, 30, 10)) and cursor != 0:
                 cursor -= 1
@@ -267,6 +322,7 @@ def draw():
         px.bltm(0,0,0,832,384,256,128)
         px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 144, 24, colkey=0)
         px.blt(3,3,0,152,0,16,16,colkey=0) #bouton quitter
+        px.blt(237,3,0,216,0,16,16,colkey=0) #bouton "créer une sauvegarde"
         for i in range(len(listSaves) if len(listSaves)<=3 else 3):
             drawFichier(10,30+i*34,listSaves[i+cursor])
             if collidpoint([px.mouse_x, px.mouse_y], [10,30+i*34,236,55+i*34]):
