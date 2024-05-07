@@ -37,6 +37,13 @@ listSaves = listdir("saves/") #liste les fichiers de sauvegardes
 cursor = 0 #utiliser pour indiquer la position dans un menu déroulant
 saveLoad = None #nom du fichier de sauvegarde actuellement utiliser
 textInput = "" #texte entrer avec falseInput()
+listTouches = ( #liste des touches avec pour chaque touche : [0:nom de la touche dans pyxel, 1:caractère minuscule, 2:caractère majuscule]
+    [px.KEY_A,"a","A"], [px.KEY_B,"b","B"], [px.KEY_C,"c","C"], [px.KEY_D,"d","D"], [px.KEY_E,"e","E"],
+    [px.KEY_F,"f","F"], [px.KEY_G,"g","G"], [px.KEY_H,"h","H"], [px.KEY_I,"i","I"], [px.KEY_J,"j","J"],
+    [px.KEY_K,"k","K"], [px.KEY_L,"l","L"], [px.KEY_M,"m","M"], [px.KEY_N,"n","N"], [px.KEY_O,"o","O"],
+    [px.KEY_P,"p","P"], [px.KEY_Q,"q","Q"], [px.KEY_R,"r","R"], [px.KEY_S,"s","S"], [px.KEY_T,"t","T"],
+    [px.KEY_U,"u","U"], [px.KEY_V,"v","V"], [px.KEY_W,"w","W"], [px.KEY_X,"x","X"], [px.KEY_Y,"y","Y"],
+    [px.KEY_Z,"z","Z"], [px.KEY_SPACE," ","   "])
 
 from frames import *
 
@@ -197,64 +204,24 @@ def collidpoint(point, rect):
     else:
         return False
 
-def falseInput():
+def falseInput(): #fonction permettant d'entrer du texte et de le stocker dans la variable "textInput" de manière passive
     global textInput
-    if btnp(pg.KEY_A,20,5):
-        textInput += "a"
-    if btnp(pg.KEY_B,20,5):
-        textInput += "b"
-    if btnp(pg.KEY_C,20,5):
-        textInput += "a"
-    if btnp(pg.KEY_D,20,5):
-        textInput += "d"
-    if btnp(pg.KEY_E,20,5):
-        textInput += "e"
-    if btnp(pg.KEY_F,20,5):
-        textInput += "f"
-    if btnp(pg.KEY_G,20,5):
-        textInput += "g"
-    if btnp(pg.KEY_H,20,5):
-        textInput += "h"
-    if btnp(pg.KEY_I,20,5):
-        textInput += "i"
-    if btnp(pg.KEY_j,20,5):
-        textInput += "j"
-    if btnp(pg.KEY_K,20,5):
-        textInput += "k"
-    if btnp(pg.KEY_L,20,5):
-        textInput += "l"
-    if btnp(pg.KEY_M,20,5):
-        textInput += "m"
-    if btnp(pg.KEY_N,20,5):
-        textInput += "n"
-    if btnp(pg.KEY_O,20,5):
-        textInput += "o"
-    if btnp(pg.KEY_P,20,5):
-        textInput += "p"
-    if btnp(pg.KEY_Q,20,5):
-        textInput += "q"
-    if btnp(pg.KEY_R,20,5):
-        textInput += "r"
-    if btnp(pg.KEY_S,20,5):
-        textInput += "s"
-    if btnp(pg.KEY_T,20,5):
-        textInput += "t"
-    if btnp(pg.KEY_U,20,5):
-        textInput += "u"
-    if btnp(pg.KEY_V,20,5):
-        textInput += "v"
-    if btnp(pg.KEY_W,20,5):
-        textInput += "w"
-    if btnp(pg.KEY_X,20,5):
-        textInput += "x"
-    if btnp(pg.KEY_Y,20,5):
-        textInput += "y"
-    if btnp(pg.KEY_Z,20,5):
-        textInput += "z"
+    if px.btn(px.KEY_SHIFT):
+        maj = True
+    else:
+        maj = False
+    for touche in listTouches: #teste si chaque touche est appuyée ou non
+        if px.btnp(touche[0],15,1):
+            if maj:
+                textInput += touche[2]
+            else:
+                textInput += touche[1]
+    if px.btnp(px.KEY_BACKSPACE,15,1):
+        textInput = textInput[:-1]
 
 # update game
 def update():
-    global cristal,cristalTick,tick,state,cursor
+    global cristal,cristalTick,tick,state,cursor,saveLoad,listSaves,textInput
     if state == "title_menu": #menu avec uniquement le titre
         cristalTick[1] += 1
         if cristalTick[1] == cristalClock[cristalTick[0]][1]:
@@ -277,7 +244,7 @@ def update():
                 px.quit()
             elif collidpoint([px.mouse_x, px.mouse_y], [112,56,144,72]):
                 state = "selFichier"
-    elif state == "selFichier": #menu de séléction de fichier de sauvegarde
+    elif state == "selFichier": #menu de sélection de fichier de sauvegarde
         if tick != 0:
             tick += 0.7
             if tick > 42:
@@ -289,38 +256,56 @@ def update():
                 if collidpoint([px.mouse_x, px.mouse_y], [3,3,18,18]):
                     state = "main_menu"
                 elif collidpoint([px.mouse_x, px.mouse_y], [237,3,253,18]):
-                    
+                    textInput = ""
+                    tick = 0
+                    state = "new_save"
                 else:
-                    for i in range(len(listSaves) if len(listSaves)<=3 else 3):
+                    for i in range(len(listSaves) if len(listSaves)<=3 else 3): #teste si une sauvegarde est appuyer et la charge
                         if collidpoint([px.mouse_x, px.mouse_y], [10,30+i*34,236,55+i*34]):
                             saveLoad = listSaves[i+cursor]
                             tick += 1
-            if px.btnp(px.KEY_S, 30, 10) or px.btnp(px.KEY_DOWN, 30, 10) and cursor != len(listSaves)-3:
+            if px.btnp(px.KEY_S, 30, 10) or px.btnp(px.KEY_DOWN, 30, 10) and cursor != len(listSaves)-3: #descend dans la liste de sauvegarde
                 cursor += 1
-            if (px.btnp(px.KEY_Z, 30, 10) or px.btnp(px.KEY_UP, 30, 10)) and cursor != 0:
+            if (px.btnp(px.KEY_Z, 30, 10) or px.btnp(px.KEY_UP, 30, 10)) and cursor != 0: #monte dans la liste de sauvegarde
                 cursor -= 1
+    elif state == "new_save":
+        falseInput()
+        tick += 0.5
+        if px.btn(px.KEY_RETURN): #créer la sauvegarde en créant un nouveau fichier et retourne au menu de sélection de sauvegarde
+            listSaves.append(textInput+".sav")
+            fichier = open("saves/"+textInput+".sav","w")
+            fichier.close()
+            textInput = ""
+            tick = 0
+            state = "selFichier"
+        else:
+            if px.btnp(px.MOUSE_BUTTON_LEFT): #si le bouton "quitter" est appuyé retourner au menu de sélection de sauvegarde sans créer de sauvegarde
+                if collidpoint([px.mouse_x, px.mouse_y], [3,3,18,18]):
+                    textInput = ""
+                    tick = 0
+                    state = "selFichier"
 
 # draw game
 def draw():
     px.cls(0)
     if state == "title_menu":
-        px.bltm(0,0,0,832,384,256,128)
-        px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 144, 24, colkey=0)
+        px.bltm(0,0,0,832,384,256,128) #fond d'écran
+        px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 144, 24, colkey=0) #titre
         if int(str(tick)[-1])%3 == 0:
             px.text(91,75,"press space to play",1)
         drawEntitie(cristal, 120, 56, "cristal")
         for i in allEntities:
             l["Entitie"+str(i)].sDraw()
     elif state == "main_menu":
-        px.bltm(0,0,0,832,384,256,128)
-        px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 144, 24, colkey=0)
+        px.bltm(0,0,0,832,384,256,128) #fond d'écran
+        px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 144, 24, colkey=0) #titre
         px.blt(3,3,0,152,0,16,16,colkey=0) #bouton quitter
         px.blt(237,3,0,168,0,16,16,colkey=0) #bouton option
         px.blt(112,56,0,184,0,32,16,colkey=0) #bouton play
         px.text(3,119,"created by BH3Panzer and Fraii",1)
     elif state == "selFichier":
-        px.bltm(0,0,0,832,384,256,128)
-        px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 144, 24, colkey=0)
+        px.bltm(0,0,0,832,384,256,128) #fond d'écran
+        px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 144, 24, colkey=0) #titre
         px.blt(3,3,0,152,0,16,16,colkey=0) #bouton quitter
         px.blt(237,3,0,216,0,16,16,colkey=0) #bouton "créer une sauvegarde"
         for i in range(len(listSaves) if len(listSaves)<=3 else 3):
@@ -328,6 +313,14 @@ def draw():
             if collidpoint([px.mouse_x, px.mouse_y], [10,30+i*34,236,55+i*34]):
                 px.rectb(9,29+i*34,238,27,10)
         animStyle(9)
+    elif state == "new_save":
+        px.bltm(0,0,0,832,384,256,128) #fond d'écran
+        px.blt(int(WIDTH/2)-72, 0, 0, 8, 0, 144, 24, colkey=0) #titre
+        px.blt(3,3,0,152,0,16,16,colkey=0) #bouton quitter
+        px.rect(30,30,196,20,5)
+        px.text(128-int(len(textInput))*2,37,textInput,1) #affiche le nom de la sauvegarde en cours de création
+        if int(str(int(tick))[-1]) > 5: #affiche le curseur de texte à intervalle régulier
+            px.rect(128+int(len(textInput))*2,37,3,6,1)
     elif state == "test_room":
         testRoom.drawRoom()
 
