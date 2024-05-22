@@ -44,6 +44,7 @@ listTouches = ( #liste des touches avec pour chaque touche : [0:nom de la touche
     [px.KEY_P,"p","P"], [px.KEY_Q,"q","Q"], [px.KEY_R,"r","R"], [px.KEY_S,"s","S"], [px.KEY_T,"t","T"],
     [px.KEY_U,"u","U"], [px.KEY_V,"v","V"], [px.KEY_W,"w","W"], [px.KEY_X,"x","X"], [px.KEY_Y,"y","Y"],
     [px.KEY_Z,"z","Z"], [px.KEY_SPACE," ","   "])
+position = [] #0:position 1:nom du lieu actuel
 
 from frames import *
 
@@ -182,7 +183,20 @@ def drawFichier(x,y,name):
     px.text(x+5,y+5,name[0:-4],9)
 
 def readSaves(saves):
-    pass
+    global position
+    fichier = open(saves+".sav","r")
+    fichier.read(1)
+    position = [[0,0],readElement(fichier)]
+    
+
+def readElement(fichier):
+    lettre = ""
+    mot = ""
+    while lettre != "}":
+        lettre = fichier.read(1)
+        if lettre != "}":
+            mot += lettre
+    return mot
 
 def animStyle(col = 1): #anim trop stylée avec des tit' rectangles
     if tick > 0:
@@ -253,9 +267,9 @@ def update():
                 tick = 0
         else:
             if px.btnp(px.MOUSE_BUTTON_LEFT):
-                if collidpoint([px.mouse_x, px.mouse_y], [3,3,18,18]):
+                if collidpoint([px.mouse_x, px.mouse_y], [3,3,18,18]): #bouton quitter
                     state = "main_menu"
-                elif collidpoint([px.mouse_x, px.mouse_y], [237,3,253,18]):
+                elif collidpoint([px.mouse_x, px.mouse_y], [237,3,253,18]): #bouton nouvelle save
                     textInput = ""
                     tick = 0
                     state = "new_save"
@@ -274,6 +288,7 @@ def update():
         if px.btn(px.KEY_RETURN): #créer la sauvegarde en créant un nouveau fichier et retourne au menu de sélection de sauvegarde
             listSaves.append(textInput+".sav")
             fichier = open("saves/"+textInput+".sav","w")
+            fichier.draw("{intro}")
             fichier.close()
             textInput = ""
             tick = 0
